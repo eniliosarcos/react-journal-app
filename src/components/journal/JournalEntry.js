@@ -1,28 +1,53 @@
-import React from 'react'
+import React from 'react';
+import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { activeNote } from '../../actions/notes';
 
-export const JournalEntry = () => {
+export const JournalEntry = ({id, date, title, body, url}) => {
+
+    const dispatch = useDispatch();
+
+    const noteDate = moment(date);
+
+    const handleEntryClick = () => {
+        
+        dispatch(
+
+            activeNote(id, {
+                date, title, body, url
+            })
+        );
+    }
+
     return (
-        <div className="journal__entry pointer">
+        <div 
+            className="journal__entry pointer animate__animated animate__fadeIn animate__faster"
+            onClick={handleEntryClick}
+        >
 
-            <div 
-                className="journal__entry-picture"
-                style={{
-                    backgroundSize: 'cover',
-                    backgroundImage: 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsTC9ceW_hHu6b5lNqRGxgIoHn2igpO0Csv7bIyqRxF4oHYEkzlwEfc0o3CVHDQ-4QqQuE0ATZHB4&usqp=CAU)'
-                }}
-            />
+            {
+                url && 
+                <div 
+                    className="journal__entry-picture"
+                    style={{
+                        backgroundSize: 'cover',
+                        backgroundImage: `url(${url})`
+                    }}
+                />
+            }
+            
             <div className="journal__entry-body">
                 <p className="journal_entry-title">
-                    Un nuevo dia
+                    {title}
                 </p>
                 <p className="journal_entry-content">
-                    asdaskdjbhasdkjbasdjhasbdasdada
+                    {body}
                 </p>
             </div>
 
             <div className="journal__entry-date-box">
-                <span>Monday</span>
-                <h4>28</h4>
+                <span>{noteDate.format('dddd')}</span>
+                <h4>{noteDate.format('Do')}</h4>
             </div>
         </div>
     )
